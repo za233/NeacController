@@ -1,0 +1,86 @@
+[Version]
+Signature   = "$Windows NT$"
+Class       = "ActivityMonitor"             ;This is determined by the work this filter driver does
+ClassGuid   = {b86dff51-a31e-4bac-b3cf-e8cfe75c9fc2}    ;This value is determined by the Class
+Provider    = %ProviderString%
+DriverVer = 12/17/2021,17.41.6.64
+
+[DestinationDirs]
+DefaultDestDir          = 12
+NeacSafe64.DriverFiles  = 12            ;%windir%\system32\drivers
+
+;;
+;; Default install sections
+;;
+
+[DefaultInstall]
+OptionDesc  = %ServiceDescription%
+CopyFiles   = NeacSafe64.DriverFiles
+
+[DefaultInstall.Services]
+AddService  = %ServiceName%,,NeacSafe64.Service
+
+;;
+;; Default uninstall sections
+;;
+
+[DefaultUninstall]
+DelFiles   = NeacSafe64.DriverFiles
+
+[DefaultUninstall.Services]
+DelService = %ServiceName%,0x200      ;Ensure service is stopped before deleting
+
+;
+; Services Section
+;
+
+[NeacSafe64.Service]
+DisplayName      = %ServiceName%
+Description      = %ServiceDescription%
+ServiceBinary    = %12%\%DriverName%.sys    ;%windir%\system32\drivers\
+Dependencies     = "FltMgr"
+ServiceType      = 2                        ;SERVICE_FILE_SYSTEM_DRIVER
+StartType        = 3                        ;SERVICE_DEMAND_START
+ErrorControl     = 1                        ;SERVICE_ERROR_NORMAL
+LoadOrderGroup   = "FSFilter Activity Monitor"
+AddReg           = NeacSafe64.AddRegistry
+
+;
+; Registry Modifications
+;
+
+[NeacSafe64.AddRegistry]
+HKR,,"SupportedFeatures",0x00010001,0x3
+HKR,"Instances","DefaultInstance",0x00000000,%DefaultInstance%
+HKR,"Instances\"%Instance1.Name%,"Altitude",0x00000000,%Instance1.Altitude%
+HKR,"Instances\"%Instance1.Name%,"Flags",0x00010001,%Instance1.Flags%
+
+;
+; Copy Files
+;
+
+[NeacSafe64.DriverFiles]
+%DriverName%.sys
+
+[SourceDisksFiles]
+NeacSafe64.sys = 1,,
+
+[SourceDisksNames]
+1 = %DiskId1%,,,
+
+;;
+;; String Section
+;;
+
+[Strings]
+ProviderString          = "TODO-Set-Provider"
+ServiceDescription      = "NeacSafe64 mini-filter driver"
+ServiceName             = "NeacSafe64"
+DriverName              = "NeacSafe64"
+DiskId1                 = "NeacSafe64 Device Installation Disk"
+
+;Instances specific information.
+DefaultInstance         = "NeacSafe64 Instance"
+Instance1.Name          = "NeacSafe64 Instance"
+Instance1.Altitude      = "370020"
+Instance1.Flags         = 0x0        ; Suppress automatic attachments
