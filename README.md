@@ -42,3 +42,10 @@ The demonstration payload currently uses a single `ret` instruction as shellcode
 2. Execution will then trigger either:
    - Debugger break-in via `STATUS_BREAKPOINT` exception
    - System crash (BSOD) if unhandled in kernel context
+
+### Whats more in <controller.h>
+
+- Cross-Process Memory Reading/Writing
+- Obtain Process Module Base Address
+- Modify Memory Page Attributes of Other Process
+- Terminate Other Process
