@@ -30,7 +30,9 @@ ultimately achieving arbitrary kernel-mode code execution (KMCE) via controlled 
 
 ### 0x3 Usage
 
-Deploying the NeacSafe64 driver via NeacSafe64.inf and executing NeacController.exe, and it will spawn a privileged cmd process. 
+Deploying the NeacSafe64 driver via NeacSafe64.inf and executing NeacController.exe, and it will spawn a privileged cmd process. **The EPROCESS structure varies across Windows versions. Developers must  manually update hardcoded offsets in source code to match their target  environment.**
+
+![image-20250402204233318](img/image-20250402204233318.png)
 
 The demonstration payload currently uses a single `ret` instruction as shellcode, resulting in no observable system behavior. For effective vulnerability validation:
 
